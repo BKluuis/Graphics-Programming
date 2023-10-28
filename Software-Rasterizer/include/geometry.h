@@ -54,6 +54,8 @@ public:
     { x /= r, y /= r; return *this; }
     Vec2& operator *= (const T &r)
     { x *= r, y *= r; return *this; }
+    const T& operator [] (uint8_t i) const { return (&x)[i]; }
+    T& operator [] (uint8_t i) { return (&x)[i]; }
     friend std::ostream& operator << (std::ostream &s, const Vec2<T> &v)
     {
         return s << '[' << v.x << ' ' << v.y << ']';
@@ -82,6 +84,8 @@ public:
     Vec3() : x(T(0)), y(T(0)), z(T(0)) {}
     Vec3(T xx) : x(xx), y(xx), z(xx) {}
     Vec3(T xx, T yy, T zz) : x(xx), y(yy), z(zz) {}
+    Vec3(Vec2<T> xy) : x(xy.x), y(xy.y), z(0) {}
+    Vec3(Vec2<T> xy, T zz) : x(xy.x), y(xy.y), z(zz) {}
     Vec3 operator + (const Vec3 &v) const
     { return Vec3(x + v.x, y + v.y, z + v.z); }
     Vec3 operator - (const Vec3 &v) const
@@ -133,7 +137,12 @@ public:
     {
         return s << '[' << v.x << ' ' << v.y << ' ' << v.z << ']';
     }
-    
+
+    friend std::istream& operator >> (std::istream &s, Vec3<T> &v)
+    {
+        return s >> v.x >> v.y >> v.z;
+    }
+
     T x, y, z;
 };
 
@@ -403,7 +412,7 @@ public:
     // 1 especially when the matrix is projective matrix (perspective projection matrix).
     //[/comment]
     template<typename S>
-    void multVecMatrix(const Vec3<S> &src, Vec3<S> &dst) const
+    S multVecMatrix(const Vec3<S> &src, Vec3<S> &dst) const
     {
         S a, b, c, w;
         
@@ -415,6 +424,7 @@ public:
         dst.x = a / w;
         dst.y = b / w;
         dst.z = c / w;
+        return w;
     }
 
     //[comment]

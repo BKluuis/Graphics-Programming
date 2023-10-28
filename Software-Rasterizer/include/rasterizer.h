@@ -1,3 +1,6 @@
+#ifndef RASTERIZER_H
+#define RASTERIZER_H
+
 #include "geometry.h"
 
 void initializeCamera(const float &apertureH, const float &apertureW, float &t,
@@ -125,8 +128,7 @@ inline void computeCorrectZ(const float &vertex0_Z, const float &vertex1_Z,
                             const float &weight1, const float &weight2,
                             float &pointZ) {
   /** Computa o valor de Z corretamente */
-  pointZ =
-      1 / (weight0 / vertex0_Z + weight1 / vertex1_Z + weight2 / vertex2_Z);
+  pointZ = 1 / (weight0 / vertex0_Z + weight1 / vertex1_Z + weight2 / vertex2_Z);
 }
 
 /**  
@@ -211,3 +213,5 @@ bool isTopLeft(const Vec3f &v0, const Vec3f &v1, const Vec3f &v2,
   // floats
   return (w0 > 0 && w1 > 0 && w2 > 0);
 }
+
+#endif
